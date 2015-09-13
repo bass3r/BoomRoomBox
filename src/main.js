@@ -1,10 +1,10 @@
-var GameName = GameName || {};
+var BoomRoomBox = BoomRoomBox || {};
 
-GameName.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '');
+BoomRoomBox.game = new Phaser.Game(600, 420, Phaser.AUTO, 'gameDiv');
 
-GameName.game.state.add('Boot', GameName.Boot);
-GameName.game.state.add('Preload', GameName.Preload);
-GameName.game.state.add('MainMenu', GameName.MainMenu);
-GameName.game.state.add('Game', GameName.Game);
+BoomRoomBox.game.state.add('Boot', BoomRoomBox.Boot);
+BoomRoomBox.game.state.add('Preload', BoomRoomBox.Preload);
+BoomRoomBox.game.state.add('MainMenu', BoomRoomBox.MainMenu);
+BoomRoomBox.game.state.add('Game', BoomRoomBox.Game);
 
-GameName.game.state.start('Boot');
+BoomRoomBox.game.state.start('Boot');

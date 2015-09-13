@@ -1,8 +1,8 @@
-var GameName = GameName || {};
+var BoomRoomBox = BoomRoomBox || {};
 
-GameName.Boot = function () {};
+BoomRoomBox.Boot = function () {};
 
-GameName.Boot.prototype = {
+BoomRoomBox.Boot.prototype = {
 
     init: function () {
         this.input.maxPointers = 1;
@@ -11,8 +11,7 @@ GameName.Boot.prototype = {
 
         if (this.game.device.desktop) {
 
-        } else
-        {
+        } else {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.setMinMax(480, 260, 1024, 768);
             this.scale.forceLandscape = true;

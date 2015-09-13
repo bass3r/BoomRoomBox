@@ -1,11 +1,11 @@
-var GameName = GameName || {};
+var BoomRoomBox = BoomRoomBox || {};
 
-GameName.Preload = function () {
+BoomRoomBox.Preload = function () {
     this.background = null;
     this.preloadBar = null;
 };
 
-GameName.Preload.prototype = {
+BoomRoomBox.Preload.prototype = {
 
     preload: function () {
         this.background = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'preloadBackground');
@@ -15,7 +15,10 @@ GameName.Preload.prototype = {
 
         this.load.setPreloadSprite(this.preloadBar);
 
-        // this.load.image('image', 'assets/images/image.png');
+        this.load.image('player', 'assets/images/player.png');
+        this.load.image('enemy1', 'assets/images/enemy1.png');
+        this.load.image('wallV', 'assets/images/wallVertical.png');
+        this.load.image('wallH', 'assets/images/wallHorizontal.png');
     },
 
     create: function () {

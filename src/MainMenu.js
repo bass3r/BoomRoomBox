@@ -1,8 +1,8 @@
-var GameName = GameName || {};
+var BoomRoomBox = BoomRoomBox || {};
 
-GameName.MainMenu = function () {};
+BoomRoomBox.MainMenu = function () {};
 
-GameName.MainMenu.prototype = {
+BoomRoomBox.MainMenu.prototype = {
 
     preload: function () {
 
