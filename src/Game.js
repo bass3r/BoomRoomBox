@@ -8,6 +8,7 @@ BoomRoomBox.Game.prototype = {
         this.GRAVITY = 800;
         this.PLAYER_VELOCITY_X = 240;
         this.PLAYER_VELOCITY_Y = 480;
+        this.enemies = [];
     },
 
     preload: function () {
@@ -22,32 +23,23 @@ BoomRoomBox.Game.prototype = {
         this.addPlayer();
 
         // add enemies
-        this.enemies = this.game.add.group();
         this.enemies.enableBody = true;
-        var enemy = this.game.add.sprite(this.game.world.centerX, 0, 'enemy1', 0, this.enemies);
-        enemy.anchor.setTo(0.5, 1);
-        this.game.physics.arcade.enable(enemy);
-
-        this.enemies.setAll('body.gravity.y', this.GRAVITY);
+        this.enemies.push(new Enemy(0, this.game, 100, 2, this.GRAVITY, 'enemy1'));
 
         this.cursor = this.game.input.keyboard.createCursorKeys();
     },
 
     update: function () {
         this.game.physics.arcade.collide(this.player, this.walls);
-        this.game.physics.arcade.collide(this.enemies, this.walls);
 
-        this.enemies.getFirstAlive().body.velocity.x = 100;
+        for (var i = 0; i < this.enemies.length; i++) {
+            if (this.enemies[i].alive) {
+                this.game.physics.arcade.collide(this.enemies[i].enemy, this.walls);
+                this.enemies[i].update();
+            }
+        }
 
         this.handleInput();
-    },
-
-    addPlayer: function () {
-        this.player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'player');
-        this.player.anchor.setTo(0.5);
-        this.game.physics.arcade.enable(this.player);
-        this.player.body.gravity.y = this.GRAVITY;
-
     },
 
     handleInput: function () {
@@ -62,6 +54,14 @@ BoomRoomBox.Game.prototype = {
         if (this.cursor.up.isDown && this.player.body.touching.down) {
             this.player.body.velocity.y = -this.PLAYER_VELOCITY_Y;
         }
+    },
+
+    addPlayer: function () {
+        this.player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'player');
+        this.player.anchor.setTo(0.5);
+        this.game.physics.arcade.enable(this.player);
+        this.player.body.gravity.y = this.GRAVITY;
+        this.player.body.collideWorldBounds = true;
     },
 
     createLevel: function () {
