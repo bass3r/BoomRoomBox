@@ -19,6 +19,9 @@ BoomRoomBox.Preload.prototype = {
         this.load.image('enemy1', 'assets/images/enemy1.png');
         this.load.image('wallV', 'assets/images/wallVertical.png');
         this.load.image('wallH', 'assets/images/wallHorizontal.png');
+        this.load.image('gun', 'assets/images/gun.png');
+        this.load.image('bullet', 'assets/images/bullet.png');
+        this.load.image('explosion', 'assets/images/explosion.png');
     },
 
     create: function () {

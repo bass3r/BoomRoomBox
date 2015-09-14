@@ -31,10 +31,12 @@ BoomRoomBox.Game.prototype = {
 
     update: function () {
         this.game.physics.arcade.collide(this.player, this.walls);
+        this.game.physics.arcade.collide(this.bullets, this.walls, this.onBulletHitWall, null, this);
 
         for (var i = 0; i < this.enemies.length; i++) {
             if (this.enemies[i].alive) {
                 this.game.physics.arcade.collide(this.enemies[i].enemy, this.walls);
+                this.game.physics.arcade.collide(this.enemies[i].enemy, this.bullets, this.onBulletHitEnemy, null, this);
                 this.enemies[i].update();
             }
         }
@@ -45,8 +47,10 @@ BoomRoomBox.Game.prototype = {
     handleInput: function () {
         if (this.cursor.left.isDown) {
             this.player.body.velocity.x = -this.PLAYER_VELOCITY_X;
+            this.turnPlayerLeft();
         } else if (this.cursor.right.isDown) {
             this.player.body.velocity.x = this.PLAYER_VELOCITY_X;
+            this.turnPlayerRight();
         } else {
             this.player.body.velocity.x = 0;
         }
@@ -54,14 +58,76 @@ BoomRoomBox.Game.prototype = {
         if (this.cursor.up.isDown && this.player.body.touching.down) {
             this.player.body.velocity.y = -this.PLAYER_VELOCITY_Y;
         }
+
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)) {
+            this.fire();
+        }
     },
 
     addPlayer: function () {
+
         this.player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'player');
         this.player.anchor.setTo(0.5);
         this.game.physics.arcade.enable(this.player);
         this.player.body.gravity.y = this.GRAVITY;
         this.player.body.collideWorldBounds = true;
+
+        this.player.gun = this.game.add.sprite(8, 4, 'gun');
+        this.player.gun.anchor.setTo(0.5);
+        this.player.addChild(this.player.gun);
+
+        // add bullets
+        this.bullets = this.game.add.group();
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.bullets.createMultiple(30, 'bullet', 0, false)
+        this.bullets.callAll('anchor.setTo', 0.5);
+        this.bullets.setAll('outOfBoundsKill', true);
+        this.bullets.setAll('checkWorldBounds', true);
+
+        // add explosions
+        this.explosions = this.game.add.group();
+        for (var i = 0; i < 10; i++) {
+            var explosionAnimation = this.explosions.create(0, 0, 'explosion', [0], false);
+            explosionAnimation.anchor.setTo(0.5, 0.5);
+            explosionAnimation.animations.add('explosion');
+        }
+
+        this.player.gun.fireRate = 150;
+        this.player.gun.nextFire = 0;
+    },
+
+    turnPlayerLeft: function () {
+        this.player.scale.x = -(Math.abs(this.player.scale.x));
+
+    },
+
+    turnPlayerRight: function () {
+        this.player.scale.x = Math.abs(this.player.scale.x);
+    },
+
+    fire: function () {
+        if (this.game.time.now > this.player.gun.nextFire && this.bullets.countDead() > 0) {
+            this.player.gun.nextFire = this.game.time.now + this.player.gun.fireRate;
+            var bullet = this.bullets.getFirstExists(false);
+            bullet.reset(this.player.x, this.player.y);
+            bullet.body.velocity.x = 500;
+            var spreadY = this.game.rnd.integerInRange(-10, 10);
+            bullet.body.velocity.y = spreadY;
+
+            this.gunRecoil();
+        }
+
+    },
+
+    gunRecoil: function () {
+        if (!this.player.gun.isMoving) {
+            var tween = this.game.add.tween(this.player.gun).to({ x: this.player.gun.x - 2}, 20, Phaser.Easing.InOut, true, 0, 1, true);
+            this.player.gun.isMoving = true;
+            tween.onComplete.add(function () {
+                this.player.gun.isMoving = false;
+            }, this);
+        }
     },
 
     createLevel: function () {
@@ -87,5 +153,18 @@ BoomRoomBox.Game.prototype = {
         middleBottom.scale.setTo(1.5, 1);
 
         this.walls.setAll('body.immovable', true);
+    },
+
+    onBulletHitEnemy: function (enemy, bullet) {
+        enemy.kill();
+        bullet.kill();
+    },
+
+    onBulletHitWall: function (bullet, wall) {
+        bullet.kill();
+
+        var explosionAnimation = this.explosions.getFirstExists(false);
+        explosionAnimation.reset(bullet.x, bullet.y);
+        explosionAnimation.play('explosion', 200, false, true);
     }
 };
