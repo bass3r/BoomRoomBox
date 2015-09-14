@@ -142,6 +142,7 @@ BoomRoomBox.Game.prototype = {
             bullet.body.velocity.x = 500;
             var spreadY = this.game.rnd.integerInRange(-10, 10);
             bullet.body.velocity.y = spreadY;
+            bullet.lifespan = 1200;
 
             this.gunRecoil();
         }
