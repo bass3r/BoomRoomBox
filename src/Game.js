@@ -49,7 +49,7 @@ BoomRoomBox.Game.prototype = {
         this.enemies = this.game.add.group();
         this.enemies.enableBody = true;
         this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
-        this.enemies.add(new Enemy(0, this.game, 100, 3, 'enemy1'));
+        this.enemies.add(new BoomRoomBox.Enemy(0, this.game, 100, 3, 'enemy1'));
 
         // add explosions
         this.explosions = this.game.add.group();

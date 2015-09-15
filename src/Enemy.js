@@ -1,4 +1,6 @@
-Enemy = function (index, game, velocity, health, sprite) {
+var BoomRoomBox = BoomRoomBox || {};
+
+BoomRoomBox.Enemy = function (index, game, velocity, health, sprite) {
 
     Phaser.Sprite.call(this, game, game.world.centerX, 0, sprite);
 
@@ -12,10 +14,10 @@ Enemy = function (index, game, velocity, health, sprite) {
     game.add.existing(this);
 };
 
-Enemy.prototype = Object.create(Phaser.Sprite.prototype);
-Enemy.prototype.constructor = Enemy;
+BoomRoomBox.Enemy.prototype = Object.create(Phaser.Sprite.prototype);
+BoomRoomBox.Enemy.prototype.constructor = BoomRoomBox.Enemy;
 
-Enemy.prototype.update = function () {
+BoomRoomBox.Enemy.prototype.update = function () {
 
     if (this.body.touching.right) {
         this.currentVelocity = -this.maxVelocity;
