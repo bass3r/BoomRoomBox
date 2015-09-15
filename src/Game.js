@@ -49,7 +49,7 @@ BoomRoomBox.Game.prototype = {
         this.enemies = this.game.add.group();
         this.enemies.enableBody = true;
         this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
-        this.enemies.add(new Enemy(0, this.game, 100, 2, 'enemy1'));
+        this.enemies.add(new Enemy(0, this.game, 100, 3, 'enemy1'));
 
         // add explosions
         this.explosions = this.game.add.group();
@@ -113,7 +113,7 @@ BoomRoomBox.Game.prototype = {
         this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-        this.bullets.createMultiple(30, 'bullet', 0, false)
+        this.bullets.createMultiple(30, 'bullet', 0, false);
         this.bullets.callAll('anchor.setTo', 0.5);
         this.bullets.setAll('outOfBoundsKill', true);
         this.bullets.setAll('checkWorldBounds', true);
@@ -136,11 +136,11 @@ BoomRoomBox.Game.prototype = {
         if (this.game.time.now > this.player.gun.nextFire && this.bullets.countDead() > 0) {
             this.player.gun.nextFire = this.game.time.now + this.player.gun.fireRate;
             var bullet = this.bullets.getFirstExists(false);
-            bullet.reset(this.player.x, this.player.y);
+            bullet.reset(this.player.x, this.player.y, 2);
             bullet.body.velocity.x = 500;
             var spreadY = this.game.rnd.integerInRange(-10, 10);
             bullet.body.velocity.y = spreadY;
-            bullet.lifespan = 1200;
+            bullet.lifespan = 1500;
 
             this.gunRecoil();
         }
@@ -184,7 +184,7 @@ BoomRoomBox.Game.prototype = {
     },
 
     onBulletHitEnemy: function (enemy, bullet) {
-        enemy.kill();
+        enemy.damage(bullet.health);
         bullet.kill();
         this.shakeWorld = 5;
         this.playExplosion(bullet.x, bullet.y);
