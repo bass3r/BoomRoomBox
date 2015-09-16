@@ -1,29 +1,26 @@
 var BoomRoomBox = BoomRoomBox || {};
 
-BoomRoomBox.Enemy = function (index, game, velocity, health, sprite) {
+BoomRoomBox.Enemy = function (index, game, velocity, sprite) {
 
-    Phaser.Sprite.call(this, game, game.world.centerX, 0, sprite);
+    Phaser.Sprite.call(this, game, game.world.centerX, 0, sprite, 0, false);
 
     this.anchor.setTo(0.5, 1);
 
     this.name = index.toString();
-    this.maxVelocity = velocity;
     this.currentVelocity = velocity;
-    this.health = health;
 
-    game.add.existing(this);
+    this.alive = false;
+    this.exists = false;
+    this.visible = false;
+
+    this.outOfBoundsKill = true;
+    this.checkOutOfBounds = true;
 };
 
 BoomRoomBox.Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 BoomRoomBox.Enemy.prototype.constructor = BoomRoomBox.Enemy;
 
 BoomRoomBox.Enemy.prototype.update = function () {
-
-    if (this.body.touching.right) {
-        this.currentVelocity = -this.maxVelocity;
-    } else if (this.body.touching.left) {
-        this.currentVelocity = this.maxVelocity;
-    }
 
     this.body.velocity.x = this.currentVelocity;
 };
