@@ -22,6 +22,36 @@ BoomRoomBox.Enemy.prototype.constructor = BoomRoomBox.Enemy;
 
 BoomRoomBox.Enemy.prototype.update = function () {
 
+
+};
+
+BoomRoomBox.Enemy.prototype.kill = function () {
+    this.alive = false;
+    this.body.enable = false;
+    this.currentVelocity = 0;
+    this.animations.stop();
+    this.animations.play('die');
+    this.events.onAnimationComplete.addOnce(function () {
+        this.exists = true;
+        this.visible = true;
+        this.inputEnabled = false;
+        this.events.destroy();
+    }, this);
+
+    if (this.events) {
+        this.events.onKilled$dispatch(this);
+    }
+
+    return this;
+};
+
+BoomRoomBox.Enemy.prototype.restart = function(x, y, health, velocity) {
+    this.reset(x, y, health);
+
     this.body.velocity.x = this.currentVelocity;
 };
 
+BoomRoomBox.Enemy.prototype.turnBack = function() {
+    this.currentVelocity *= -1;
+    this.body.velocity.x = this.currentVelocity;
+};

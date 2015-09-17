@@ -72,6 +72,7 @@ BoomRoomBox.Game.prototype = {
         this.game.physics.arcade.collide(this.player, this.walls);
         this.game.physics.arcade.collide(this.enemies, this.walls, this.onEnemyHitWall, null, this);
         this.game.physics.arcade.overlap(this.player.bullets, this.walls, null, this.onBulletHitWall, this);
+        this.game.physics.arcade.overlap(this.player, this.enemies, null, this.onPlayerHitEnemy, this);
         this.game.physics.arcade.overlap(this.enemies, this.player.bullets, null, this.onBulletHitEnemy, this);
 
         this.spawnEnemy();
@@ -90,7 +91,7 @@ BoomRoomBox.Game.prototype = {
         if (this.game.time.now > this.nextEnemyAt && this.enemies.countDead() > 0) {
                 this.nextEnemyAt = this.game.time.now + 3000;
                 var enemy = this.enemies.getFirstExists(false);
-                enemy.reset(this.game.world.centerX, 0, 3);
+                enemy && enemy.restart(this.game.world.centerX, 0, 3);
             }
     },
 
@@ -109,7 +110,7 @@ BoomRoomBox.Game.prototype = {
             this.player.body.velocity.y = -this.PLAYER_VELOCITY_Y;
         }
 
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)) {
+        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT) || this.game.input.pointer1.isDown) {
             this.player.fire();
         }
     },
@@ -125,6 +126,7 @@ BoomRoomBox.Game.prototype = {
 
         this.player.outOfBoundsKill = true;
         this.player.checkOutOfBounds = true;
+        this.player.health = 10;
     },
 
     createLevel: function () {
@@ -153,6 +155,10 @@ BoomRoomBox.Game.prototype = {
         this.walls.setAll('body.allowGravity', false);
     },
 
+    onPlayerHitEnemy: function(player, enemy) {
+        player.takeDamage(enemy.health);
+    },
+
     onBulletHitEnemy: function (enemy, bullet) {
         enemy.damage(bullet.health);
         bullet.kill();
@@ -170,7 +176,7 @@ BoomRoomBox.Game.prototype = {
 
     onEnemyHitWall: function (enemy, wall) {
         if(wall.key == "wallV") {
-            enemy.currentVelocity *= -1;
+            enemy.turnBack();
         }
     },
 

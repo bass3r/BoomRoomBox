@@ -20,6 +20,8 @@ BoomRoomBox.Player = function (game, x, y, sprite) {
     this.bullets.setAll('outOfBoundsKill', true);
     this.bullets.setAll('checkWorldBounds', true);
     this.bullets.setAll('body.allowGravity', false);
+
+    this.invulnerableUntil = 0;
 };
 
 BoomRoomBox.Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -61,4 +63,16 @@ BoomRoomBox.Player.prototype.gunRecoil = function () {
 BoomRoomBox.Player.prototype.getDirectionSign = function () {
     var scaleX = this.scale.x;
     return scaleX && scaleX / Math.abs(scaleX);
+};
+
+BoomRoomBox.Player.prototype.takeDamage = function (damageAmount) {
+    if(this.game.time.now > this.invulnerableUntil) {
+        this.damage(damageAmount);
+        this.makeInvulnerable(2000);
+    }
+};
+
+BoomRoomBox.Player.prototype.makeInvulnerable = function (duration) {
+    this.invulnerableUntil = this.game.time.now + duration;
+    this.game.add.tween(this).to( {alpha: 0}, 200, Phaser.Easing.Cubic.InOut, true, 0, 5, true);
 };
