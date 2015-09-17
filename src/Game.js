@@ -50,7 +50,7 @@ BoomRoomBox.Game.prototype = {
         this.enemies = this.game.add.group();
         this.enemies.enableBody = true;
         this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
-        for(var i = 0; i < 5; i++) {
+        for (var i = 0; i < 15; i++) {
             this.enemies.add(new BoomRoomBox.Enemy(i, this.game, 100, 'enemy1'));
         }
         this.enemies.setAll('body.gravity.y', this.GRAVITY);
@@ -89,10 +89,10 @@ BoomRoomBox.Game.prototype = {
 
     spawnEnemy: function () {
         if (this.game.time.now > this.nextEnemyAt && this.enemies.countDead() > 0) {
-                this.nextEnemyAt = this.game.time.now + 3000;
-                var enemy = this.enemies.getFirstExists(false);
-                enemy && enemy.restart(this.game.world.centerX, 0, 3);
-            }
+            this.nextEnemyAt = this.game.time.now + 3000;
+            var enemy = this.enemies.getFirstExists(false);
+            enemy && enemy.restart(this.game.world.centerX, 0, 3);
+        }
     },
 
     handleInput: function () {
@@ -155,15 +155,20 @@ BoomRoomBox.Game.prototype = {
         this.walls.setAll('body.allowGravity', false);
     },
 
-    onPlayerHitEnemy: function(player, enemy) {
+    onPlayerHitEnemy: function (player, enemy) {
         player.takeDamage(enemy.health);
+        return false;
     },
 
     onBulletHitEnemy: function (enemy, bullet) {
-        enemy.damage(bullet.health);
+
         bullet.kill();
-        this.shakeWorld = 5;
+        enemy.damage(bullet.health);
+        if (!enemy.alive) {
+            this.shakeWorld = 5;
+        }
         this.playExplosion(bullet.x, bullet.y);
+
         return false;
     },
 
@@ -175,15 +180,15 @@ BoomRoomBox.Game.prototype = {
     },
 
     onEnemyHitWall: function (enemy, wall) {
-        if(wall.key == "wallV") {
+        if (wall.key == "wallV") {
             enemy.turnBack();
         }
     },
 
     shakeScreen: function () {
         if (this.shakeWorld > 0) {
-            var rand1 = this.game.rnd.integerInRange(-1, 1);
-            var rand2 = this.game.rnd.integerInRange(-1, 1);
+            var rand1 = this.game.rnd.integerInRange(-3, 3);
+            var rand2 = this.game.rnd.integerInRange(-3, 3);
             this.game.world.setBounds(rand1, rand2, this.game.width + rand1, this.game.height + rand2);
             this.shakeWorld--;
             if (this.shakeWorld == 0) {
