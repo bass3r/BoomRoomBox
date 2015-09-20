@@ -66,7 +66,11 @@ BoomRoomBox.Game.prototype = {
             explosionAnimation.animations.add('explosion');
         }
 
+        this.game.add.text(20, 370, this.player.gun.properties.name, {font: "14px Arial", fill: "#fff"});
+
         this.cursor = this.game.input.keyboard.createCursorKeys();
+        this.fireKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+        this.fireKey.onDown.add(this.player.onFireKeyDown, this.player);
     },
 
     update: function () {
@@ -113,8 +117,8 @@ BoomRoomBox.Game.prototype = {
             this.player.body.velocity.y = -this.PLAYER_VELOCITY_Y;
         }
 
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.SHIFT) || this.game.input.pointer1.isDown) {
-            this.player.fire();
+        if (this.fireKey.isDown || this.game.input.pointer1.isDown) {
+            this.player.onFireKeyDown(this.fireKey, true);
         }
     },
 
@@ -177,7 +181,7 @@ BoomRoomBox.Game.prototype = {
     },
 
     onBulletHitWall: function (bullet, wall) {
-        if(!bullet.hit) {
+        if (!bullet.hit) {
             bullet.hit = true;
             return;
         }
@@ -207,12 +211,14 @@ BoomRoomBox.Game.prototype = {
 
     playExplosion: function (posX, posY) {
         var explosionAnimation = this.explosions.getFirstExists(false);
-        explosionAnimation.reset(posX, posY);
-        explosionAnimation.play('explosion', 30, false, true);
+        if (explosionAnimation) {
+            explosionAnimation.reset(posX, posY);
+            explosionAnimation.play('explosion', 30, false, true);
+        }
     },
 
-    checkPlayerOutOfBounds: function() {
-        if(this.player.y > this.game.width && this.player.alive) {
+    checkPlayerOutOfBounds: function () {
+        if (this.player.y > this.game.width && this.player.alive) {
             this.player.kill();
         }
     }
