@@ -71,7 +71,7 @@ BoomRoomBox.Game.prototype = {
     update: function () {
         this.game.physics.arcade.collide(this.player, this.walls);
         this.game.physics.arcade.collide(this.enemies, this.walls, this.onEnemyHitWall, null, this);
-        this.game.physics.arcade.overlap(this.player.bullets, this.walls, null, this.onBulletHitWall, this);
+        this.game.physics.arcade.overlap(this.player.bullets, this.walls, this.onBulletHitWall, null, this);
         this.game.physics.arcade.overlap(this.player, this.enemies, null, this.onPlayerHitEnemy, this);
         this.game.physics.arcade.overlap(this.enemies, this.player.bullets, null, this.onBulletHitEnemy, this);
 
@@ -173,10 +173,14 @@ BoomRoomBox.Game.prototype = {
     },
 
     onBulletHitWall: function (bullet, wall) {
+        if(!bullet.hit) {
+            bullet.hit = true;
+            return;
+        }
         bullet.kill();
-
+        bullet.hit = false;
         this.playExplosion(bullet.x, bullet.y);
-        return false;
+
     },
 
     onEnemyHitWall: function (enemy, wall) {
@@ -200,6 +204,7 @@ BoomRoomBox.Game.prototype = {
     playExplosion: function (posX, posY) {
         var explosionAnimation = this.explosions.getFirstExists(false);
         explosionAnimation.reset(posX, posY);
-        explosionAnimation.play('explosion', 300, false, true);
+        explosionAnimation.play('explosion', 30, false, true);
+    },
     }
 };
