@@ -23,6 +23,8 @@ BoomRoomBox.Preload.prototype = {
         this.load.image('machinegun', 'assets/images/machinegun.png');
         this.load.image('bullet', 'assets/images/bullet.png');
         this.load.spritesheet('explosion', 'assets/images/explosion.png', 16, 16);
+
+        this.load.json('weaponsDef', 'assets/defs/weapons.json');
     },
 
     create: function () {

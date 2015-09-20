@@ -66,7 +66,7 @@ BoomRoomBox.Game.prototype = {
             explosionAnimation.animations.add('explosion');
         }
 
-        this.game.add.text(20, 370, this.player.gun.properties.name, {font: "14px Arial", fill: "#fff"});
+        this.game.add.text(20, 370, this.player.gun.def.name, {font: "14px Arial", fill: "#fff"});
 
         this.cursor = this.game.input.keyboard.createCursorKeys();
         this.fireKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);

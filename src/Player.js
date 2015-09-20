@@ -5,41 +5,10 @@ BoomRoomBox.Player = function (game, x, y, sprite) {
 
     game.add.existing(this);
 
-    this.weapons = [
-        {
-            index: 0,
-            name: 'Pistol',
-            sprite: 'pistol',
-            power: 4,
-            automatic: false,
-            cooldownTime: 20,
-            spread: 10,
-            bullet: {
-                sprite: 'bullet',
-                speed: 700,
-                splashRadius: 0,
-                lifespan: 3000
-            }
-        },
-        {
-            index: 1,
-            name: 'Machine gun',
-            sprite: 'machinegun',
-            power: 1,
-            automatic: true,
-            cooldownTime: 80,
-            spread: 20,
-            bullet: {
-                sprite: 'bullet',
-                speed: 700,
-                splashRadius: 0,
-                lifespan: 3000
-            }
-        },
-    ];
+    this.weaponsDef = game.cache.getJSON('weaponsDef');
 
     this.gun = this.game.add.sprite(8, 4, 'pistol');
-    this.gun.properties = this.weapons[0];
+    this.gun.def = this.weaponsDef[0];
     this.addChild(this.gun);
     this.gun.anchor.setTo(0.5);
     this.gun.nextFire = 0;
@@ -71,20 +40,20 @@ BoomRoomBox.Player.prototype.turnRight = function () {
 };
 
 BoomRoomBox.Player.prototype.onFireKeyDown = function (key, subsequent) {
-    if(!this.gun.properties.automatic && !subsequent || this.gun.properties.automatic) {
+    if (!this.gun.def.automatic && !subsequent || this.gun.def.automatic) {
         this.fire();
     }
 };
 
 BoomRoomBox.Player.prototype.fire = function (subsequent) {
     if (this.game.time.now > this.gun.nextFire && this.bullets.countDead() > 0) {
-        this.gun.nextFire = this.game.time.now + this.gun.properties.cooldownTime;
+        this.gun.nextFire = this.game.time.now + this.gun.def.cooldownTime;
         var bullet = this.bullets.getFirstExists(false);
-        bullet.reset(this.x, this.y, this.gun.properties.power);
-        bullet.body.velocity.x = this.gun.properties.bullet.speed * this.getDirectionSign();
-        var spreadY = this.game.rnd.integerInRange(-this.gun.properties.spread, this.gun.properties.spread);
+        bullet.reset(this.x, this.y, this.gun.def.power);
+        bullet.body.velocity.x = this.gun.def.bullet.speed * this.getDirectionSign();
+        var spreadY = this.game.rnd.integerInRange(-this.gun.def.spread, this.gun.def.spread);
         bullet.body.velocity.y = spreadY;
-        bullet.lifespan = this.gun.properties.bulletLifespan;
+        bullet.lifespan = this.gun.def.bulletLifespan;
 
         this.gunRecoil();
     }
@@ -119,9 +88,9 @@ BoomRoomBox.Player.prototype.makeInvulnerable = function (duration) {
 };
 
 BoomRoomBox.Player.prototype.equipWeapon = function (weaponIndex) {
-    if (this.gun.properties.index != weaponIndex) {
-        this.gun.properties = this.weapons[weaponIndex];
-        this.gun.loadTexture(this.gun.properties.sprite, 0, true);
+    if (this.gun.def.index != weaponIndex) {
+        this.gun.def = this.weaponsDef[weaponIndex];
+        this.gun.loadTexture(this.gun.def.sprite, 0, true);
     }
 };
 

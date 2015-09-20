@@ -1,0 +1,32 @@
+[
+    {
+        "index": 0,
+        "name": "Pistol",
+        "sprite": "pistol",
+        "power": 4,
+        "automatic": false,
+        "cooldownTime": 20,
+        "spread": 10,
+        "bullet": {
+            "sprite": "bullet",
+            "speed": 700,
+            "splashRadius": 0,
+            "lifespan": 3000
+        }
+    },
+    {
+        "index": 1,
+        "name": "Machine gun",
+        "sprite": "machinegun",
+        "power": 1,
+        "automatic": true,
+        "cooldownTime": 80,
+        "spread": 20,
+        "bullet": {
+            "sprite": "bullet",
+            "speed": 700,
+            "splashRadius": 0,
+            "lifespan": 3000
+        }
+    }
+]
