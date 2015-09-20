@@ -13,8 +13,6 @@ BoomRoomBox.Player = function (game, x, y, sprite) {
     this.gun.anchor.setTo(0.5);
     this.gun.nextFire = 0;
 
-    this.equipWeapon(1);
-
     // add bullets
     this.bullets = this.game.add.group();
     this.bullets.enableBody = true;
