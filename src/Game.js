@@ -33,6 +33,13 @@ BoomRoomBox.Game.prototype = {
         this.PLAYER_VELOCITY_Y = 480;
         this.enemies = [];
         this.nextEnemyAt = 0;
+
+        this.cratePositions = [
+            {"x": 204, "y": 120},
+            {"x": 372, "y": 120},
+            {"x": 60, "y": 336},
+            {"x": 516, "y": 336},
+        ]
     },
 
     preload: function () {
@@ -66,8 +73,15 @@ BoomRoomBox.Game.prototype = {
             explosionAnimation.animations.add('explosion');
         }
 
-        this.game.add.text(20, 370, this.player.gun.def.name, {font: "14px Arial", fill: "#fff"});
+        // init crate
+        var newCratePos = this.getNewCratePosition();
+        this.crate = this.game.add.sprite(newCratePos.x, newCratePos.y, 'crate');
+        this.crate.anchor.setTo(0.5, 1);
+        this.game.physics.arcade.enable(this.crate);
 
+        this.guntext = this.game.add.text(20, 370, this.player.gun.def.name, {font: "14px Arial", fill: "#fff"});
+
+        // init input/keyboard
         this.cursor = this.game.input.keyboard.createCursorKeys();
         this.fireKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
         this.fireKey.onDown.add(this.player.onFireKeyDown, this.player);
@@ -79,6 +93,7 @@ BoomRoomBox.Game.prototype = {
         this.game.physics.arcade.overlap(this.player.bullets, this.walls, this.onBulletHitWall, null, this);
         this.game.physics.arcade.overlap(this.player, this.enemies, null, this.onPlayerHitEnemy, this);
         this.game.physics.arcade.overlap(this.enemies, this.player.bullets, null, this.onBulletHitEnemy, this);
+        this.game.physics.arcade.overlap(this.player, this.crate, null, this.onPlayerHitCrate, this);
 
         this.spawnEnemy();
         this.checkPlayerOutOfBounds();
@@ -91,7 +106,7 @@ BoomRoomBox.Game.prototype = {
         //this.game.debug.body(this.player.gun);
         //BoomRoomBox.pixel.context.drawImage(this.game.canvas, 0, 0, this.game.width, this.game.height, 0, 0, BoomRoomBox.pixel.width, BoomRoomBox.pixel.height);
 
-        this.game.debug.spriteInfo(this.player, 32, 32);
+        //this.game.debug.spriteInfo(this.player, 32, 32);
     },
 
     spawnEnemy: function () {
@@ -196,6 +211,13 @@ BoomRoomBox.Game.prototype = {
         if (wall.key == "wallV") {
             enemy.turnBack();
         }
+
+    onPlayerHitCrate: function (player, crate) {
+        var weaponIndex = this.game.rnd.integerInRange(1, this.player.weaponsDef.length - 1);
+        player.equipWeapon(weaponIndex);
+        var newCratePos = this.getNewCratePosition();
+        crate.reset(newCratePos.x, newCratePos.y);
+        this.guntext.text = player.gun.def.name;
     },
 
     shakeScreen: function () {
@@ -222,5 +244,15 @@ BoomRoomBox.Game.prototype = {
         if (this.player.y > this.game.width && this.player.alive) {
             this.player.kill();
         }
+    },
+
+    getNewCratePosition: function () {
+        var newIdx = -1;
+        do {
+            newIdx = this.game.rnd.integerInRange(0, this.cratePositions.length - 1);
+        } while (newIdx == this.crateIndex);
+
+        this.crateIndex = newIdx;
+        return this.cratePositions[newIdx];
     }
 };
