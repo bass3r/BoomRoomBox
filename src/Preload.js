@@ -16,7 +16,7 @@ BoomRoomBox.Preload.prototype = {
         this.load.setPreloadSprite(this.preloadBar);
 
         this.load.image('player', 'assets/images/player.png');
-        this.load.spritesheet('enemy1', 'assets/images/enemy1.png', 24, 24);
+        this.load.spritesheet('enemySmall', 'assets/images/enemy_small.png', 24, 24);
         this.load.image('wallV', 'assets/images/wallVertical.png');
         this.load.image('wallH', 'assets/images/wallHorizontal.png');
         this.load.image('pistol', 'assets/images/pistol.png');

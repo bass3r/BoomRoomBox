@@ -59,7 +59,7 @@ BoomRoomBox.Game.prototype = {
         this.enemies.enableBody = true;
         this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
         for (var i = 0; i < 15; i++) {
-            this.enemies.add(new BoomRoomBox.Enemy(i, this.game, 100, 'enemy1'));
+            this.enemies.add(new BoomRoomBox.Enemy(i, this.game, 100, 'enemySmall'));
         }
         this.enemies.setAll('body.gravity.y', this.GRAVITY);
         this.enemies.setAll('outOfBoundsKill', false);
@@ -113,7 +113,7 @@ BoomRoomBox.Game.prototype = {
         if (this.game.time.now > this.nextEnemyAt && this.enemies.countDead() > 0) {
             this.nextEnemyAt = this.game.time.now + 3000;
             var enemy = this.enemies.getFirstExists(false);
-            enemy && enemy.restart(this.game.world.centerX, 0, 3);
+            enemy && enemy.reset(this.game.world.centerX, 0, 3);
         }
     },
 
@@ -211,6 +211,11 @@ BoomRoomBox.Game.prototype = {
         if (wall.key == "wallV") {
             enemy.turnBack();
         }
+
+        if (!enemy.body.velocity.x) {
+            enemy.beginMovement();
+        }
+    },
 
     onPlayerHitCrate: function (player, crate) {
         var weaponIndex = this.game.rnd.integerInRange(1, this.player.weaponsDef.length - 1);
