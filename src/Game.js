@@ -40,8 +40,9 @@ BoomRoomBox.Game.prototype = {
     },
 
     create: function () {
-        this.game.stage.backgroundColor = "#43ABCD"
+        this.game.stage.backgroundColor = "#8BC4D6"
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.game.world.setBounds(0, 0, 600, 420);
         //this.game.physics.arcade.gravity.y = this.GRAVITY;
         this.createLevel();
         this.addPlayer();
@@ -135,9 +136,6 @@ BoomRoomBox.Game.prototype = {
         this.walls.enableBody = true;
 
         // Create the 10 walls
-        this.game.add.sprite(0, 0, 'wallV', 0, this.walls); // Left
-        this.game.add.sprite(576, 0, 'wallV', 0, this.walls); // Right
-
         this.game.add.sprite(0, 0, 'wallH', 0, this.walls); // Top left
         this.game.add.sprite(360, 0, 'wallH', 0, this.walls); // Top right
         this.game.add.sprite(0, 396, 'wallH', 0, this.walls); // Bottom left
@@ -145,6 +143,9 @@ BoomRoomBox.Game.prototype = {
 
         this.game.add.sprite(-120, 192, 'wallH', 0, this.walls); // Middle left
         this.game.add.sprite(480, 192, 'wallH', 0, this.walls); // Middle right
+
+        this.game.add.sprite(0, 0, 'wallV', 0, this.walls); // Left
+        this.game.add.sprite(576, 0, 'wallV', 0, this.walls); // Right
 
         var middleTop = this.game.add.sprite(120, 96, 'wallH', 0, this.walls);
         middleTop.scale.setTo(1.5, 1);
