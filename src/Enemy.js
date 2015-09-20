@@ -8,7 +8,6 @@ BoomRoomBox.Enemy = function (index, game, velocity, sprite) {
 
     this.name = index.toString();
     this.maxVelocity = velocity;
-    this.currentVelocity = 0;
 
     this.alive = false;
     this.exists = false;
@@ -30,7 +29,6 @@ BoomRoomBox.Enemy.prototype.update = function () {
 BoomRoomBox.Enemy.prototype.kill = function () {
     this.alive = false;
     this.maxVelocity = 0;
-    this.currentVelocity = 0;
     this.animations.stop();
     this.animations.play('die', 30);
     this.events.onAnimationComplete.addOnce(function () {
@@ -46,12 +44,16 @@ BoomRoomBox.Enemy.prototype.kill = function () {
 };
 
 BoomRoomBox.Enemy.prototype.turnBack = function() {
-    this.currentVelocity *= -1;
-    this.body.velocity.x = this.currentVelocity;
+    this.body.velocity.x = this.maxVelocity * this.getDirectionSign() * -1;
+    this.scale.x *= -1;
 };
 
 BoomRoomBox.Enemy.prototype.beginMovement = function() {
-    this.currentVelocity = this.maxVelocity
-    this.body.velocity.x = this.currentVelocity;
+    this.body.velocity.x = this.maxVelocity * this.getDirectionSign();
+};
+
+BoomRoomBox.Enemy.prototype.getDirectionSign = function () {
+    var scaleX = this.scale.x;
+    return scaleX && scaleX / Math.abs(scaleX);
 };
 
