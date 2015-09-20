@@ -1,6 +1,6 @@
 var BoomRoomBox = BoomRoomBox || {};
 
-BoomRoomBox.game = new Phaser.Game(600, 420, Phaser.AUTO, 'gameDiv');
+BoomRoomBox.game = new Phaser.Game(576, 384, Phaser.AUTO, 'gameDiv');
 
 BoomRoomBox.game.state.add('Boot', BoomRoomBox.Boot);
 BoomRoomBox.game.state.add('Preload', BoomRoomBox.Preload);

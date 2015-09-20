@@ -142,21 +142,22 @@ BoomRoomBox.Game.prototype = {
         this.walls.enableBody = true;
 
         // Create the 10 walls
-        this.game.add.sprite(0, 0, 'wallH', 0, this.walls); // Top left
-        this.game.add.sprite(360, 0, 'wallH', 0, this.walls); // Top right
-        this.game.add.sprite(0, 396, 'wallH', 0, this.walls); // Bottom left
-        this.game.add.sprite(360, 396, 'wallH', 0, this.walls); // Bottom right
-
-        this.game.add.sprite(-120, 192, 'wallH', 0, this.walls); // Middle left
-        this.game.add.sprite(480, 192, 'wallH', 0, this.walls); // Middle right
-
         this.game.add.sprite(0, 0, 'wallV', 0, this.walls); // Left
-        this.game.add.sprite(576, 0, 'wallV', 0, this.walls); // Right
+        this.game.add.sprite(552, 0, 'wallV', 0, this.walls); // Right
 
-        var middleTop = this.game.add.sprite(120, 96, 'wallH', 0, this.walls);
-        middleTop.scale.setTo(1.5, 1);
-        var middleBottom = this.game.add.sprite(120, 288, 'wallH', 0, this.walls);
-        middleBottom.scale.setTo(1.5, 1);
+        this.game.add.sprite(-24, 0, 'wallH', 0, this.walls); // Top left
+        this.game.add.sprite(312, 0, 'wallH', 0, this.walls); // Top right
+        this.game.add.sprite(-24, 360, 'wallH', 0, this.walls); // Bottom left
+        this.game.add.sprite(312, 360, 'wallH', 0, this.walls); // Bottom right
+        this.game.add.sprite(-144, 336, 'wallH', 0, this.walls); // Below Middle left
+        this.game.add.sprite(432, 336, 'wallH', 0, this.walls); // Below Middle right
+
+        this.game.add.sprite(-144, 192, 'wallH', 0, this.walls); // Middle left
+        this.game.add.sprite(432, 192, 'wallH', 0, this.walls); // Middle right
+
+
+        var middleTop = this.game.add.sprite(144, 120, 'wallH', 0, this.walls);
+        var middleBottom = this.game.add.sprite(144, 264, 'wallH', 0, this.walls);
 
         this.walls.setAll('body.immovable', true);
         this.walls.setAll('body.allowGravity', false);
