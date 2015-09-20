@@ -28,7 +28,7 @@ BoomRoomBox.Game = function () {
 BoomRoomBox.Game.prototype = {
 
     init: function () {
-        this.GRAVITY = 800;
+        this.GRAVITY = 1000;
         this.PLAYER_VELOCITY_X = 240;
         this.PLAYER_VELOCITY_Y = 480;
         this.enemies = [];
@@ -55,8 +55,8 @@ BoomRoomBox.Game.prototype = {
             this.enemies.add(new BoomRoomBox.Enemy(i, this.game, 100, 'enemy1'));
         }
         this.enemies.setAll('body.gravity.y', this.GRAVITY);
-        this.enemies.setAll('outOfBoundsKill', true);
-        this.enemies.setAll('checkOutOfBounds', true);
+        this.enemies.setAll('outOfBoundsKill', false);
+        this.enemies.setAll('checkOutOfBounds', false);
 
         // add explosions
         this.explosions = this.game.add.group();
@@ -77,6 +77,7 @@ BoomRoomBox.Game.prototype = {
         this.game.physics.arcade.overlap(this.enemies, this.player.bullets, null, this.onBulletHitEnemy, this);
 
         this.spawnEnemy();
+        this.checkPlayerOutOfBounds();
         this.handleInput();
         this.shakeScreen();
     },
@@ -84,6 +85,7 @@ BoomRoomBox.Game.prototype = {
     render: function () {
         //this.game.debug.body(this.player);
         //this.game.debug.body(this.player.gun);
+        //BoomRoomBox.pixel.context.drawImage(this.game.canvas, 0, 0, this.game.width, this.game.height, 0, 0, BoomRoomBox.pixel.width, BoomRoomBox.pixel.height);
 
         this.game.debug.spriteInfo(this.player, 32, 32);
     },
@@ -125,8 +127,8 @@ BoomRoomBox.Game.prototype = {
         //this.player.body.collideWorldBounds = true;
         this.player.body.gravity.y = this.GRAVITY;
 
-        this.player.outOfBoundsKill = true;
-        this.player.checkOutOfBounds = true;
+        this.player.outOfBoundsKill = false;
+        this.player.checkOutOfBounds = false;
         this.player.health = 10;
     },
 
@@ -166,6 +168,7 @@ BoomRoomBox.Game.prototype = {
         bullet.kill();
         enemy.damage(bullet.health);
         if (!enemy.alive) {
+            this.enemies.remove(enemy);
             this.shakeWorld = 5;
         }
         this.playExplosion(bullet.x, bullet.y);
@@ -207,5 +210,10 @@ BoomRoomBox.Game.prototype = {
         explosionAnimation.reset(posX, posY);
         explosionAnimation.play('explosion', 30, false, true);
     },
+
+    checkPlayerOutOfBounds: function() {
+        if(this.player.y > this.game.width && this.player.alive) {
+            this.player.kill();
+        }
     }
 };

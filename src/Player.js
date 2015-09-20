@@ -7,7 +7,7 @@ BoomRoomBox.Player = function (game, x, y, sprite) {
 
     this.gun = this.game.add.sprite(8, 4, 'gun');
     this.gun.anchor.setTo(0.5);
-    this.gun.fireRate = 150;
+    this.gun.fireRate = 80;
     this.gun.nextFire = 0;
     this.addChild(this.gun);
 
@@ -41,8 +41,8 @@ BoomRoomBox.Player.prototype.fire = function () {
         this.gun.nextFire = this.game.time.now + this.gun.fireRate;
         var bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.x, this.y, 2);
-        bullet.body.velocity.x = 500 * this.getDirectionSign();
-        var spreadY = this.game.rnd.integerInRange(-15, 15);
+        bullet.body.velocity.x = 700 * this.getDirectionSign();
+        var spreadY = this.game.rnd.integerInRange(-20, 20);
         bullet.body.velocity.y = spreadY;
         bullet.lifespan = 1500;
 
@@ -57,6 +57,7 @@ BoomRoomBox.Player.prototype.gunRecoil = function () {
         tween.onComplete.add(function () {
             this.gun.isMoving = false;
         }, this);
+        this.body.x -= 2 * this.getDirectionSign();
     }
 };
 
