@@ -33,6 +33,7 @@ BoomRoomBox.Game.prototype = {
         this.PLAYER_VELOCITY_Y = 480;
         this.enemies = [];
         this.nextEnemyAt = 0;
+        this.score = 0;
 
         this.cratePositions = [
             {"x": 204, "y": 120},
@@ -79,7 +80,9 @@ BoomRoomBox.Game.prototype = {
         this.crate.anchor.setTo(0.5, 1);
         this.game.physics.arcade.enable(this.crate);
 
-        this.guntext = this.game.add.text(20, 370, this.player.gun.def.name, {font: "14px Arial", fill: "#fff"});
+        // add texts to the scene
+        this.gunText = this.game.add.text(40, 364, this.player.gun.def.name, {font: "14px Arial", fill: "#fff"});
+        this.scoreText = this.game.add.text(40, 20, this.score, {font: "24px Arial", fill: "#fff"});
 
         // init input/keyboard
         this.cursor = this.game.input.keyboard.createCursorKeys();
@@ -222,7 +225,9 @@ BoomRoomBox.Game.prototype = {
         player.equipWeapon(weaponIndex);
         var newCratePos = this.getNewCratePosition();
         crate.reset(newCratePos.x, newCratePos.y);
-        this.guntext.text = player.gun.def.name;
+        this.gunText.text = player.gun.def.name;
+        this.score++;
+        this.scoreText.text = this.score;
     },
 
     shakeScreen: function () {
