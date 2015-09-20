@@ -16,12 +16,12 @@ BoomRoomBox.Preload.prototype = {
         this.load.setPreloadSprite(this.preloadBar);
 
         this.load.image('player', 'assets/images/player.png');
-        this.load.image('enemy1', 'assets/images/enemy1.png');
+        this.load.spritesheet('enemy1', 'assets/images/enemy1.png', 24, 24);
         this.load.image('wallV', 'assets/images/wallVertical.png');
         this.load.image('wallH', 'assets/images/wallHorizontal.png');
         this.load.image('gun', 'assets/images/gun.png');
         this.load.image('bullet', 'assets/images/bullet.png');
-        this.load.image('explosion', 'assets/images/explosion.png');
+        this.load.spritesheet('explosion', 'assets/images/explosion.png', 16, 16);
     },
 
     create: function () {

@@ -15,6 +15,8 @@ BoomRoomBox.Enemy = function (index, game, velocity, sprite) {
 
     this.outOfBoundsKill = true;
     this.checkOutOfBounds = true;
+
+    this.animations.add('die');
 };
 
 BoomRoomBox.Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -27,15 +29,12 @@ BoomRoomBox.Enemy.prototype.update = function () {
 
 BoomRoomBox.Enemy.prototype.kill = function () {
     this.alive = false;
-    this.body.enable = false;
     this.currentVelocity = 0;
     this.animations.stop();
-    this.animations.play('die');
+    this.animations.play('die', 30);
     this.events.onAnimationComplete.addOnce(function () {
-        this.exists = true;
-        this.visible = true;
-        this.inputEnabled = false;
-        this.events.destroy();
+        this.exists = false;
+        this.visible = false;
     }, this);
 
     if (this.events) {
